@@ -1,5 +1,10 @@
+require "odesk/configuration"
+require "odesk/connection"
 require "odesk/version"
 
 module Odesk
-  # Your code goes here...
+  class << self
+    include Configuration
+    include Connection
+  end
 end

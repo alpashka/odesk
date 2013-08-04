@@ -45,7 +45,7 @@ The access tokens will never expire so to skip this process in future sessions y
       config.oauth_token = "ACCESS_TOKEN"
       config.oauth_token_secret = "SECRET"
     end
-    
+
     #=> Odesk ready to make requests...
 
 ## Supported Ruby Versions
