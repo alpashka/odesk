@@ -20,10 +20,12 @@ describe Odesk::Configuration do
   end
 
   it 'should have a default set for the endpoint' do
+    Odesk.reset_configuration
     Odesk.endpoint.must_equal "https://www.odesk.com"
   end
   
-  it 'should have a default set for the useragent' do
+  it 'should have a default set for the user agent' do
+    Odesk.reset_configuration
     Odesk.user_agent.must_equal "Odesk gem v#{Odesk::VERSION}"
   end
   
@@ -32,5 +34,10 @@ describe Odesk::Configuration do
       config.user_agent = "Custom User Agent"
     end
     Odesk.user_agent.must_equal "Custom User Agent"
+  end
+  
+  it 'should allow config to be reset' do
+    Odesk.reset_configuration
+    Odesk.consumer_key.must_equal nil
   end
 end

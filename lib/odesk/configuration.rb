@@ -10,7 +10,8 @@ module Odesk
       :oauth_token_secret,
       :callback_url,
       :user_agent,
-      :endpoint
+      :endpoint,
+      :faraday_adapter
     ]
 
     attr_accessor *VALID_CONFIGURATION_KEYS
@@ -28,6 +29,14 @@ module Odesk
 
     def user_agent
       @user_agent || "Odesk gem v#{Odesk::VERSION}"
+    end
+
+    def faraday_adapter
+      @faraday_adapter || Net::HTTP
+    end
+
+    def reset_configuration
+      VALID_CONFIGURATION_KEYS.each {|k| self.send("#{k}=", nil)}
     end
   end
 end
