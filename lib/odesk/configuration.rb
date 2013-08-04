@@ -1,7 +1,7 @@
 module Odesk
   class InvalidConfigurationError < StandardError
   end
-  
+
   module Configuration
     VALID_CONFIGURATION_KEYS = [
       :consumer_key,
@@ -32,7 +32,7 @@ module Odesk
     end
 
     def faraday_adapter
-      @faraday_adapter || Net::HTTP
+      @faraday_adapter || :net_http
     end
 
     def reset_configuration
