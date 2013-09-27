@@ -30,9 +30,9 @@ The ODesk API uses OAuth 1.0 for authenticating requests, so you will first need
 
 Send your user to the `Odesk.authorize_url` and once they have agreed to allow you application access to their ODesk data they will be redirected to your callback URL with with `oauth_token` and `oauth_verifier` parameters added to the query string.
 
-Then to obtain an access token:
+Then supply the oauth_verifier to obtain an access token:
 
-    Odesk.get_access_token("oauth_token", "oauth_verifier")
+    Odesk.get_access_token("oauth_verifier")
     # => {:oauth_token => "ACCESS_TOKEN", :oauth_token_secret => "SECRET"}
 
 You will then be able to make authenticated requests to the API.
