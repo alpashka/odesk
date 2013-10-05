@@ -36,7 +36,7 @@ module Odesk
         raise OauthError, "The oauth token and secret need to be set before obtaining an access token"
       end
       Odesk.verifier_token = verifier_token
-      extract_tokens(connection.post '/api/auth/v1/oauth/token/access')
+      tokens = extract_tokens(connection.post '/api/auth/v1/oauth/token/access')
     end
 
     private
@@ -45,6 +45,7 @@ module Odesk
       tokens = Hash[URI.decode_www_form(response.body)]
       Odesk.oauth_token = tokens['oauth_token']
       Odesk.oauth_token_secret = tokens['oauth_token_secret']
+      tokens.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
     end
 
     def oauth_options

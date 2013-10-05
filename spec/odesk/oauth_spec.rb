@@ -67,7 +67,7 @@ describe Odesk::Connection do
     describe 'with correct config' do 
       before do
         Odesk.oauth_token = "test_oauth_token"
-        Odesk.get_access_token('verifier_token')
+        @access_tokens = Odesk.get_access_token('verifier_token')
       end
       
       it 'should set the verifier token' do
@@ -78,6 +78,11 @@ describe Odesk::Connection do
       it 'should reset the oauth tokens with the new access token details' do
         Odesk.oauth_token.must_equal 'access_token'
         Odesk.oauth_token_secret.must_equal 'access_token_secret'
+      end
+      
+      it 'should return a hash of the access tokens' do
+        @access_tokens[:oauth_token].must_equal Odesk.oauth_token
+        @access_tokens[:oauth_token_secret].must_equal Odesk.oauth_token_secret
       end
     end
   end
