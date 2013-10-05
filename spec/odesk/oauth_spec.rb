@@ -25,9 +25,16 @@ describe Odesk::Connection do
     @oauth_options[:consumer_secret].must_equal "test_consumer_secret"
   end
   
-  it 'should raise an error if the consumer keys are not set' do
+  it 'should raise an error if the consumer key is not set' do
     proc {
       Odesk.consumer_key = nil
+      Odesk.connection
+    }.must_raise Odesk::InvalidConfigurationError
+  end
+  
+  it 'should raise an error if the consumer secret is not set' do
+    proc {
+      Odesk.consumer_secret = nil
       Odesk.connection
     }.must_raise Odesk::InvalidConfigurationError
   end
