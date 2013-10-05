@@ -1,5 +1,7 @@
 # Odesk
 
+[![Build Status](https://travis-ci.org/bigblue/odesk.png?branch=master)](https://travis-ci.org/bigblue/odesk) [![Code Climate](https://codeclimate.com/github/bigblue/odesk.png)](https://codeclimate.com/github/bigblue/odesk) [![Coverage Status](https://coveralls.io/repos/bigblue/odesk/badge.png?branch=master)](https://coveralls.io/r/bigblue/odesk?branch=master)
+
 Ruby gem to interact with the [ODesk REST api](http://developers.odesk.com/w/page/12363985/API%20Documentation).
 
 ## Installation
