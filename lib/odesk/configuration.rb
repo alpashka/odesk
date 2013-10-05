@@ -8,6 +8,7 @@ module Odesk
       :consumer_secret,
       :oauth_token,
       :oauth_token_secret,
+      :verifier_token,
       :callback_url,
       :user_agent,
       :endpoint,
@@ -19,8 +20,8 @@ module Odesk
     def configure
       yield self
       self
-      rescue
-        raise InvalidConfigurationError
+      rescue Exception => e
+        raise InvalidConfigurationError, e.message
     end
 
     def endpoint

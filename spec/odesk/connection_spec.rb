@@ -2,6 +2,11 @@ require_relative '../spec_helper'
 
 describe Odesk::Connection do
   before do
+    Odesk.configure do |config|
+      config.consumer_key    = "bia6i6yiaylufoeswia77iujlunoacrl"
+      config.consumer_secret = "prouw9iasiuwleyl"
+      config.callback_url    = "http://localhost:3000/oauth/callback"
+    end
     @connection = Odesk.connection
   end
   
@@ -15,6 +20,10 @@ describe Odesk::Connection do
   
   it 'should have the user agent set' do
     @connection.headers[:user_agent].must_equal Odesk.user_agent
+  end
+
+  it 'should use the faraday oauth middleware' do
+    @connection.builder[0].klass.must_equal FaradayMiddleware::OAuth
   end
   
 end

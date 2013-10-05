@@ -23,9 +23,9 @@ Or install it yourself as:
 The ODesk API uses OAuth 1.0 for authenticating requests, so you will first need to [register your application with ODesk](https://www.odesk.com/services/api/keys) to obtain a consumer key and secret. Then complete the following process to obtain an access token:
 
     Odesk.configure do |config|
-      config.consumer_key = YOUR_ODESK_KEY
-      config.consumer_secret = YOUR_ODESK_SECRET
-      config.callback_url = FULLY_QUALIFIED_URL  #e.g. http://localhost:3001/oauth/callback
+      config.consumer_key = "YOUR_ODESK_KEY"
+      config.consumer_secret = "YOUR_ODESK_SECRET"
+      config.callback_url = "FULLY_QUALIFIED_URL"  #e.g. http://localhost:3001/oauth/callback
     end
 
 Send your user to the `Odesk.authorize_url` and once they have agreed to allow you application access to their ODesk data they will be redirected to your callback URL with with `oauth_token` and `oauth_verifier` parameters added to the query string.
