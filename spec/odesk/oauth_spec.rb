@@ -32,7 +32,7 @@ def set_odesk_configuration
   end
 end
 
-describe Odesk::Connection do
+describe Odesk::Oauth do
   before do
     set_odesk_configuration
   end
