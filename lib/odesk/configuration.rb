@@ -1,7 +1,9 @@
+# encoding: utf-8
 module Odesk
   class InvalidConfigurationError < StandardError
   end
 
+  # Odesk gem configuration (mostly oauth tokens)
   module Configuration
     VALID_CONFIGURATION_KEYS = [
       :consumer_key,
@@ -20,12 +22,12 @@ module Odesk
     def configure
       yield self
       self
-      rescue Exception => e
-        raise InvalidConfigurationError, e.message
+      rescue => error
+        raise InvalidConfigurationError, error.message
     end
 
     def endpoint
-      @endpoint || "https://www.odesk.com"
+      @endpoint || 'https://www.odesk.com'
     end
 
     def user_agent
@@ -37,7 +39,7 @@ module Odesk
     end
 
     def reset_configuration
-      VALID_CONFIGURATION_KEYS.each {|k| self.send("#{k}=", nil)}
+      VALID_CONFIGURATION_KEYS.each { |k| send("#{k}=", nil) }
     end
   end
 end
