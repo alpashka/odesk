@@ -3,13 +3,13 @@ require_relative '../spec_helper'
 
 def request_response
   'oauth_callback_confirmed=true' +
-  '&oauth_token=test_oauth_token' +
-  '&oauth_token_secret=test_oauth_token_secret'
+  '&token=test_token' +
+  '&token_secret=test_token_secret'
 end
 
 def access_response
-  'oauth_token=access_token' +
-  '&oauth_token_secret=access_token_secret'
+  'token=access_token' +
+  '&token_secret=access_token_secret'
 end
 
 def build_stubs
@@ -62,55 +62,55 @@ describe Odesk::Oauth do
       @authorize_url = Odesk.authorize_url
     end
 
-    it 'should set the oauth_token' do
-      Odesk.oauth_token.must_equal 'test_oauth_token'
+    it 'should set the token' do
+      Odesk.token.must_equal 'test_token'
     end
 
-    it 'should set the oauth_token_secret' do
-      Odesk.oauth_token_secret.must_equal 'test_oauth_token_secret'
+    it 'should set the token_secret' do
+      Odesk.token_secret.must_equal 'test_token_secret'
     end
 
     it 'should encode the correct params in the auth url' do
       url = 'https://www.odesk.com/services/api/auth?' +
             'oauth_callback=http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fcallback' +
-            '&oauth_token=test_oauth_token'
+            '&token=test_token'
       @authorize_url.must_equal url
     end
 
     it 'should also reset the oauth options for the oauth middleware' do
       @oauth_options = Odesk.connection.app.instance_variable_get '@options'
-      @oauth_options[:token].must_equal 'test_oauth_token'
-      @oauth_options[:token_secret].must_equal 'test_oauth_token_secret'
+      @oauth_options[:token].must_equal 'test_token'
+      @oauth_options[:token_secret].must_equal 'test_token_secret'
     end
   end
 
   describe 'when getting an access token' do
     it 'should raise an error if the oauth tokens are not set' do
       proc {
-        Odesk.oauth_token = nil
+        Odesk.token = nil
         Odesk.get_access_token('verify_token')
       }.must_raise Odesk::OauthError
     end
 
     describe 'with correct config' do
       before do
-        Odesk.oauth_token = 'test_oauth_token'
-        @access_tokens = Odesk.get_access_token('verifier_token')
+        Odesk.token = 'test_token'
+        @access_tokens = Odesk.get_access_token('verifier')
       end
 
       it 'should set the verifier token' do
         oauth_options = Odesk.connection.app.instance_variable_get '@options'
-        oauth_options[:verifier].must_equal 'verifier_token'
+        oauth_options[:verifier].must_equal 'verifier'
       end
 
       it 'should reset the oauth tokens with the new access token details' do
-        Odesk.oauth_token.must_equal 'access_token'
-        Odesk.oauth_token_secret.must_equal 'access_token_secret'
+        Odesk.token.must_equal 'access_token'
+        Odesk.token_secret.must_equal 'access_token_secret'
       end
 
       it 'should return a hash of the access tokens' do
-        @access_tokens[:oauth_token].must_equal Odesk.oauth_token
-        @access_tokens[:oauth_token_secret].must_equal Odesk.oauth_token_secret
+        @access_tokens[:token].must_equal Odesk.token
+        @access_tokens[:token_secret].must_equal Odesk.token_secret
       end
     end
   end

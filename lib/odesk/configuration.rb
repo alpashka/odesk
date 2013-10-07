@@ -8,9 +8,9 @@ module Odesk
     VALID_CONFIGURATION_KEYS = [
       :consumer_key,
       :consumer_secret,
-      :oauth_token,
-      :oauth_token_secret,
-      :verifier_token,
+      :token,
+      :token_secret,
+      :verifier,
       :callback_url,
       :user_agent,
       :endpoint,
