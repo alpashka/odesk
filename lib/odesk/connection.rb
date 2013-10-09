@@ -27,13 +27,13 @@ module Odesk
 
     def validate_consumer_key
       unless Odesk.consumer_key
-        raise InvalidConfigurationError, 'The consumer key is not set'
+        fail InvalidConfigurationError, 'The consumer key is not set'
       end
     end
 
     def validate_consumer_secret
       unless Odesk.consumer_secret
-        raise InvalidConfigurationError, 'The consumer secret is not set'
+        fail InvalidConfigurationError, 'The consumer secret is not set'
       end
     end
 

@@ -24,7 +24,7 @@ module Odesk
 
     def validate_access_request!
       unless Odesk.token && Odesk.token_secret
-        raise OauthError, 'Oauth token and secret requrired'
+        fail OauthError, 'Oauth token and secret requrired'
       end
     end
 
