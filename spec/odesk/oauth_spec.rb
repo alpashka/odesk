@@ -24,7 +24,7 @@ def build_stubs
 end
 
 def set_odesk_configuration
-  Odesk.configure do |config|
+  Odesk::Client.new do |config|
     config.consumer_key    = 'test_consumer_key'
     config.consumer_secret = 'test_consumer_secret'
     config.callback_url    = 'http://localhost:3000/oauth/callback'
@@ -34,40 +34,40 @@ end
 
 describe Odesk::Oauth do
   before do
-    set_odesk_configuration
+    @client = set_odesk_configuration
   end
 
   it 'should have the oauth consumer tokens set' do
-    @oauth_options = Odesk.connection.app.instance_variable_get '@options'
+    @oauth_options = @client.connection.app.instance_variable_get '@options'
     @oauth_options[:consumer_key].must_equal 'test_consumer_key'
     @oauth_options[:consumer_secret].must_equal 'test_consumer_secret'
   end
 
   it 'should raise an error if the consumer key is not set' do
-    proc {
-      Odesk.consumer_key = nil
-      Odesk.connection
-    }.must_raise Odesk::InvalidConfigurationError
+    proc do
+      @client.consumer_key = nil
+      @client.connection
+    end.must_raise Odesk::InvalidConfigurationError
   end
 
   it 'should raise an error if the consumer secret is not set' do
-    proc {
-      Odesk.consumer_secret = nil
-      Odesk.connection
-    }.must_raise Odesk::InvalidConfigurationError
+    proc do
+      @client.consumer_secret = nil
+      @client.connection
+    end.must_raise Odesk::InvalidConfigurationError
   end
 
   describe 'when calling authorise_url' do
     before do
-      @authorize_url = Odesk.authorize_url
+      @authorize_url = @client.authorize_url
     end
 
     it 'should set the token' do
-      Odesk.token.must_equal 'test_token'
+      @client.token.must_equal 'test_token'
     end
 
     it 'should set the token_secret' do
-      Odesk.token_secret.must_equal 'test_token_secret'
+      @client.token_secret.must_equal 'test_token_secret'
     end
 
     it 'should encode the correct params in the auth url' do
@@ -78,7 +78,7 @@ describe Odesk::Oauth do
     end
 
     it 'should also reset the oauth options for the oauth middleware' do
-      @oauth_options = Odesk.connection.app.instance_variable_get '@options'
+      @oauth_options = @client.connection.app.instance_variable_get '@options'
       @oauth_options[:token].must_equal 'test_token'
       @oauth_options[:token_secret].must_equal 'test_token_secret'
     end
@@ -86,31 +86,32 @@ describe Odesk::Oauth do
 
   describe 'when getting an access token' do
     it 'should raise an error if the oauth tokens are not set' do
-      proc {
-        Odesk.token = nil
-        Odesk.get_access_token('verify_token')
-      }.must_raise Odesk::OauthError
+      proc do
+        @client.token = nil
+        @client.get_access_token('verify_token')
+      end.must_raise Odesk::OauthError
     end
 
     describe 'with correct config' do
       before do
-        Odesk.token = 'test_token'
-        @access_tokens = Odesk.get_access_token('verifier')
+        @client.token = 'test_token'
+        @client.token_secret = 'test_secret'
+        @access_tokens = @client.get_access_token('verifier')
       end
 
       it 'should set the verifier token' do
-        oauth_options = Odesk.connection.app.instance_variable_get '@options'
+        oauth_options = @client.connection.app.instance_variable_get '@options'
         oauth_options[:verifier].must_equal 'verifier'
       end
 
       it 'should reset the oauth tokens with the new access token details' do
-        Odesk.token.must_equal 'access_token'
-        Odesk.token_secret.must_equal 'access_token_secret'
+        @client.token.must_equal 'access_token'
+        @client.token_secret.must_equal 'access_token_secret'
       end
 
       it 'should return a hash of the access tokens' do
-        @access_tokens[:token].must_equal Odesk.token
-        @access_tokens[:token_secret].must_equal Odesk.token_secret
+        @access_tokens[:token].must_equal @client.token
+        @access_tokens[:token_secret].must_equal @client.token_secret
       end
     end
   end

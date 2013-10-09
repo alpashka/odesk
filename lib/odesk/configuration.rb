@@ -20,11 +20,12 @@ module Odesk
     attr_accessor *VALID_CONFIGURATION_KEYS
 
     def configure
-      yield self
+      yield self if block_given?
       self
       rescue => error
         raise InvalidConfigurationError, error.message
     end
+    alias_method :initialize, :configure
 
     def endpoint
       @endpoint || 'https://www.odesk.com'

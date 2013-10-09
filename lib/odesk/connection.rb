@@ -11,10 +11,10 @@ module Odesk
     def connection
       validate_configuration!
 
-      Faraday.new(Odesk.endpoint, faraday_options) do |conn|
+      Faraday.new(endpoint, faraday_options) do |conn|
         conn.request :oauth, oauth_options
         conn.request :url_encoded
-        conn.adapter *Odesk.faraday_adapter
+        conn.adapter *faraday_adapter
       end
     end
 
@@ -26,26 +26,26 @@ module Odesk
     end
 
     def validate_consumer_key
-      unless Odesk.consumer_key
+      unless consumer_key
         fail InvalidConfigurationError, 'The consumer key is not set'
       end
     end
 
     def validate_consumer_secret
-      unless Odesk.consumer_secret
+      unless consumer_secret
         fail InvalidConfigurationError, 'The consumer secret is not set'
       end
     end
 
     def faraday_options
       { headers: {
-          user_agent: Odesk.user_agent
+          user_agent: user_agent
         } }
     end
 
     def oauth_options
       [:consumer_key, :consumer_secret, :token, :token_secret,
-        :verifier].reduce({}){ |opts,k| opts[k] = Odesk.send(k); opts }
+        :verifier].reduce({}){ |opts,k| opts[k] = send(k); opts }
     end
   end
 end
