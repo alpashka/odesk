@@ -19,7 +19,8 @@ module Odesk
 
     attr_accessor *VALID_CONFIGURATION_KEYS
 
-    def configure
+    def configure(config=nil)
+      load_hash_config(config) if config
       yield self if block_given?
       self
       rescue => error
@@ -41,6 +42,12 @@ module Odesk
 
     def reset_configuration
       VALID_CONFIGURATION_KEYS.each { |k| send("#{k}=", nil) }
+    end
+
+    private
+
+    def load_hash_config(config)
+      config.each { |attr, value| send("#{attr}=", value) }
     end
   end
 end

@@ -62,5 +62,11 @@ describe Odesk::Configuration do
         end
       }.must_raise Odesk::InvalidConfigurationError
     end
+
+    it 'should also accept configuration via a hash' do
+      config = { consumer_key: 'consumer_key' }
+      @client = Odesk::Client.new(config)
+      @client.consumer_key.must_equal 'consumer_key'
+    end
   end
 end
