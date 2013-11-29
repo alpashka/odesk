@@ -2,71 +2,42 @@
 require_relative '../spec_helper'
 
 describe Odesk::Configuration do
-  describe 'on the Odesk module' do
-    before do
-      Odesk.configure do |config|
-        config.consumer_key = 'test'
-      end
-    end
-
-    it 'should accept configuration block' do
-      Odesk.consumer_key.must_equal 'test'
-    end
-
-    it 'should not accept invalid configuration keys' do
-      proc {
-        Odesk.configure do |config|
-          config.bad_option = 'test'
-        end
-      }.must_raise Odesk::InvalidConfigurationError
-    end
-
-    it 'should have a default set for the endpoint' do
-      Odesk.reset_configuration
-      Odesk.endpoint.must_equal 'https://www.odesk.com'
-    end
-
-    it 'should have a default set for the user agent' do
-      Odesk.reset_configuration
-      Odesk.user_agent.must_equal "Odesk gem v#{Odesk::VERSION}"
-    end
-
-    it 'should allow defaults be overridden' do
-      Odesk.configure do |config|
-        config.user_agent = 'Custom User Agent'
-      end
-      Odesk.user_agent.must_equal 'Custom User Agent'
-    end
-
-    it 'should allow config to be reset' do
-      Odesk.reset_configuration
-      Odesk.consumer_key.must_equal nil
+  before do
+    @client = Odesk::Client.new do |config|
+      config.consumer_key = 'test'
     end
   end
 
-  describe 'on the client class' do
-    before do
-      @client = Odesk::Client.new do |config|
-        config.consumer_key = 'test'
+  it 'should accept configuration block' do
+    @client.consumer_key.must_equal 'test'
+  end
+
+  it 'should also accept configuration via a hash' do
+    config = { consumer_key: 'consumer_key' }
+    @hsh_client = Odesk::Client.new(config)
+    @hsh_client.consumer_key.must_equal 'consumer_key'
+  end
+
+  it 'should not accept invalid configuration keys' do
+    proc do
+      Odesk::Client.new do |config|
+        config.bad_option = 'test'
       end
-    end
+    end.must_raise Odesk::InvalidConfigurationError
+  end
 
-    it 'should accept configuration block' do
-      @client.consumer_key.must_equal 'test'
-    end
+  it 'should have a default set for the endpoint' do
+    @client.endpoint.must_equal 'https://www.odesk.com'
+  end
 
-    it 'should not accept invalid configuration keys' do
-      proc {
-        @client.configure do |config|
-          config.bad_option = 'test'
-        end
-      }.must_raise Odesk::InvalidConfigurationError
-    end
+  it 'should have a default set for the user agent' do
+    @client.user_agent.must_equal "Odesk gem v#{Odesk::VERSION}"
+  end
 
-    it 'should also accept configuration via a hash' do
-      config = { consumer_key: 'consumer_key' }
-      @client = Odesk::Client.new(config)
-      @client.consumer_key.must_equal 'consumer_key'
+  it 'should allow defaults be overridden' do
+    @custom = Odesk::Client.new do |config|
+      config.user_agent = 'Custom User Agent'
     end
+    @custom.user_agent.must_equal 'Custom User Agent'
   end
 end

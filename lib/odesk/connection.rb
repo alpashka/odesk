@@ -45,7 +45,7 @@ module Odesk
 
     def oauth_options
       [:consumer_key, :consumer_secret, :token, :token_secret,
-        :verifier].reduce({}){ |opts,k| opts[k] = send(k); opts }
+       :verifier].reduce({}) { |opts, k| opts[k] = send(k); opts }
     end
   end
 end

@@ -3,6 +3,7 @@ require 'odesk/configuration'
 require 'odesk/connection'
 require 'odesk/oauth'
 require 'odesk/client'
+require 'odesk/resources/job'
 require 'odesk/version'
 
 # global Odesk object

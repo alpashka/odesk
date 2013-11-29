@@ -19,7 +19,7 @@ module Odesk
 
     attr_accessor *VALID_CONFIGURATION_KEYS
 
-    def configure(config=nil)
+    def configure(config = nil)
       load_hash_config(config) if config
       yield self if block_given?
       self
