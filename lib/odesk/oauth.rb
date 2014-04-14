@@ -19,7 +19,7 @@ module Odesk
 
     def authorize_request_params
       { oauth_callback: callback_url,
-        token: token }
+        oauth_token: token }
     end
 
     def validate_access_request!
@@ -35,8 +35,8 @@ module Odesk
     end
 
     def save_tokens(tokens)
-      self.token = tokens['token']
-      self.token_secret = tokens['token_secret']
+      self.token = tokens['oauth_token']
+      self.token_secret = tokens['oauth_token_secret']
     end
   end
 end
